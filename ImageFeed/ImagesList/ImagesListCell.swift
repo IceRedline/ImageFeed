@@ -9,21 +9,14 @@ import UIKit
 
 final class ImagesListCell: UITableViewCell {
 
+    // MARK: - @IBOutlet properties
+    
     @IBOutlet weak var cellImage: UIImageView!
     @IBOutlet weak var likeButton: UIButton!
     @IBOutlet weak var dateLabel: UILabel!
     
-    static let reuseIDentifier = "ImagesListCell"
+    // MARK: - Static properties
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
-    }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
-    }
+    static let reuseIDentifier = "ImagesListCell"
 
 }
