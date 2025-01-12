@@ -18,10 +18,10 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="selectedImageTintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <tabBarAppearance key="standardAppearance">
-                            <color key="backgroundColor" name="YPBackground"/>
+                            <color key="backgroundColor" name="YP_Black"/>
                         </tabBarAppearance>
                         <tabBarAppearance key="scrollEdgeAppearance">
-                            <color key="backgroundColor" name="YPBackground"/>
+                            <color key="backgroundColor" name="YP_Black"/>
                         </tabBarAppearance>
                     </tabBar>
                     <connections>
@@ -54,27 +54,27 @@
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Екатерина Новикова" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pPM-Tv-YCi">
                                         <rect key="frame" x="0.0" y="80" width="233.66666666666666" height="27.666666666666671"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="23"/>
-                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="textColor" name="YP_White"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="@ekaterina_nov" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YRY-af-IiC">
                                         <rect key="frame" x="0.0" y="117.66666666666666" width="97" height="15.666666666666657"/>
                                         <color key="tintColor" red="0.68235294117647061" green="0.68627450980392157" blue="0.70588235294117641" alpha="1" colorSpace="calibratedRGB"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                        <color key="textColor" red="0.68235294117647061" green="0.68627450980392157" blue="0.70588235294117641" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        <color key="textColor" name="YP_Gray"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hello, world!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SU7-mx-CaI">
                                         <rect key="frame" x="0.0" y="143.33333333333334" width="75.666666666666671" height="15.666666666666657"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="textColor" name="YP_White"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
                             </stackView>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Exit" translatesAutoresizingMaskIntoConstraints="NO" id="VTb-OD-oov">
                                 <rect key="frame" x="345" y="114" width="24" height="24"/>
-                                <color key="tintColor" red="0.96078431372549022" green="0.41960784313725491" blue="0.42352941176470588" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="tintColor" name="YP_Red"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="24" id="ubJ-1g-t2h"/>
                                     <constraint firstAttribute="height" constant="24" id="xtm-XZ-wFS"/>
@@ -82,7 +82,7 @@
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="cJG-VJ-qvv"/>
-                        <color key="backgroundColor" name="YPBackground"/>
+                        <color key="backgroundColor" name="YP_Black"/>
                         <constraints>
                             <constraint firstItem="cJG-VJ-qvv" firstAttribute="trailing" secondItem="VTb-OD-oov" secondAttribute="trailing" constant="24" id="BI9-Oa-qFM"/>
                             <constraint firstItem="7os-3W-hC1" firstAttribute="leading" secondItem="cJG-VJ-qvv" secondAttribute="leading" constant="16" id="Q6V-xU-mYb"/>
@@ -111,14 +111,25 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="0" translatesAutoresizingMaskIntoConstraints="NO" id="y4d-Bt-Wvk">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6Ah-oz-Bap">
                                 <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
-                            </imageView>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="0" translatesAutoresizingMaskIntoConstraints="NO" id="y4d-Bt-Wvk">
+                                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </imageView>
+                                </subviews>
+                                <viewLayoutGuide key="contentLayoutGuide" id="tgD-5n-3T2"/>
+                                <viewLayoutGuide key="frameLayoutGuide" id="64H-sN-wBF"/>
+                                <connections>
+                                    <outlet property="delegate" destination="IXc-0j-hHV" id="3Df-fr-vLK"/>
+                                </connections>
+                            </scrollView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xRl-sE-Tvp">
-                                <rect key="frame" x="9" y="9" width="24" height="24"/>
+                                <rect key="frame" x="9" y="9" width="48" height="48"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="24" id="gjf-WX-bh6"/>
-                                    <constraint firstAttribute="height" constant="24" id="vNO-qc-gYY"/>
+                                    <constraint firstAttribute="width" constant="48" id="gjf-WX-bh6"/>
+                                    <constraint firstAttribute="height" constant="48" id="vNO-qc-gYY"/>
                                 </constraints>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                 <state key="normal" image="backward"/>
@@ -126,21 +137,36 @@
                                     <action selector="backButtonTapped" destination="IXc-0j-hHV" eventType="touchUpInside" id="s6O-g8-rgt"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ybG-N6-h9x">
+                                <rect key="frame" x="171" y="751" width="51" height="51"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="51" id="Fwi-3t-g8X"/>
+                                    <constraint firstAttribute="width" constant="51" id="wxc-S5-H70"/>
+                                </constraints>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" image="Sharing"/>
+                                <connections>
+                                    <action selector="shareButtonTapped" destination="IXc-0j-hHV" eventType="touchUpInside" id="V3b-Xj-nUE"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="0JL-7F-eYG"/>
-                        <color key="backgroundColor" name="YPBackground"/>
+                        <color key="backgroundColor" name="YP_Black"/>
                         <constraints>
-                            <constraint firstItem="y4d-Bt-Wvk" firstAttribute="trailing" secondItem="uPJ-dh-ACr" secondAttribute="trailing" id="00C-Qr-8lF"/>
-                            <constraint firstItem="y4d-Bt-Wvk" firstAttribute="top" secondItem="uPJ-dh-ACr" secondAttribute="top" id="I57-VO-bl7"/>
+                            <constraint firstItem="0JL-7F-eYG" firstAttribute="bottom" secondItem="ybG-N6-h9x" secondAttribute="bottom" constant="50" id="4ah-Bs-bS9"/>
+                            <constraint firstItem="6Ah-oz-Bap" firstAttribute="bottom" secondItem="uPJ-dh-ACr" secondAttribute="bottom" id="UfS-tc-edj"/>
+                            <constraint firstItem="6Ah-oz-Bap" firstAttribute="leading" secondItem="uPJ-dh-ACr" secondAttribute="leading" id="Y0C-nY-9eb"/>
+                            <constraint firstItem="6Ah-oz-Bap" firstAttribute="trailing" secondItem="uPJ-dh-ACr" secondAttribute="trailing" id="Y4f-xY-HKM"/>
+                            <constraint firstItem="6Ah-oz-Bap" firstAttribute="top" secondItem="uPJ-dh-ACr" secondAttribute="top" id="dws-15-ISB"/>
                             <constraint firstItem="xRl-sE-Tvp" firstAttribute="top" secondItem="0JL-7F-eYG" secondAttribute="top" constant="9" id="ngm-Hq-fdE"/>
-                            <constraint firstItem="y4d-Bt-Wvk" firstAttribute="leading" secondItem="uPJ-dh-ACr" secondAttribute="leading" id="pWy-qY-MFg"/>
-                            <constraint firstAttribute="bottom" secondItem="y4d-Bt-Wvk" secondAttribute="bottom" id="uPm-FC-ST9"/>
                             <constraint firstItem="xRl-sE-Tvp" firstAttribute="leading" secondItem="0JL-7F-eYG" secondAttribute="leading" constant="9" id="vdt-yb-QfA"/>
+                            <constraint firstItem="ybG-N6-h9x" firstAttribute="centerX" secondItem="uPJ-dh-ACr" secondAttribute="centerX" id="we2-zA-jWN"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="77c-Bb-oVx"/>
                     <connections>
                         <outlet property="imageView" destination="y4d-Bt-Wvk" id="8E0-Wh-Ihb"/>
+                        <outlet property="scrollView" destination="6Ah-oz-Bap" id="lIg-ye-rLq"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ApF-kd-tQh" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -157,7 +183,7 @@
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="2mL-E5-n6n">
                                 <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
-                                <color key="backgroundColor" name="YPBackground"/>
+                                <color key="backgroundColor" name="YP_Black"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="ImagesListCell" rowHeight="157" id="iT7-2A-LcX" customClass="ImagesListCell" customModule="ImageFeed" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="50" width="393" height="157"/>
@@ -189,7 +215,7 @@
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="27 августа 2022" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rlk-3s-JWl">
                                                             <rect key="frame" x="8" y="4.0000000000000133" width="101.66666666666667" height="15.666666666666664"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <color key="textColor" name="YP_White"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                     </subviews>
@@ -212,7 +238,7 @@
                                                 <constraint firstItem="YGV-XN-CCi" firstAttribute="trailing" secondItem="CRY-UD-sjn" secondAttribute="trailing" id="xxx-mW-a2T"/>
                                             </constraints>
                                         </tableViewCellContentView>
-                                        <color key="backgroundColor" name="YPBackground"/>
+                                        <color key="backgroundColor" name="YP_Black"/>
                                         <connections>
                                             <outlet property="cellImage" destination="YGV-XN-CCi" id="ZD6-g4-1vP"/>
                                             <outlet property="dateLabel" destination="rlk-3s-JWl" id="6Wl-3F-Is7"/>
@@ -223,7 +249,7 @@
                             </tableView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
-                        <color key="backgroundColor" name="YPBackground"/>
+                        <color key="backgroundColor" name="YP_Black"/>
                         <constraints>
                             <constraint firstItem="2mL-E5-n6n" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="6js-tE-nly"/>
                             <constraint firstItem="2mL-E5-n6n" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="9o7-aw-mw0"/>
@@ -250,11 +276,11 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="1IK-Pu-8q8">
                         <rect key="frame" x="0.0" y="59" width="393" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="backgroundColor" name="YPBackground"/>
-                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <color key="barTintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" name="YP_Black"/>
+                        <color key="tintColor" name="YP_White"/>
+                        <color key="barTintColor" name="YP_White"/>
                         <navigationBarAppearance key="standardAppearance">
-                            <color key="backgroundColor" name="YPBackground"/>
+                            <color key="backgroundColor" name="YP_Black"/>
                         </navigationBarAppearance>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -270,13 +296,23 @@
     <resources>
         <image name="0" width="1600" height="1059"/>
         <image name="Exit" width="24" height="24"/>
+        <image name="Sharing" width="51" height="51"/>
         <image name="backward" width="24" height="24"/>
         <image name="favorite_inactive" width="30" height="26"/>
         <image name="profilepic" width="350" height="350"/>
         <image name="tab_main_active" width="30" height="30"/>
         <image name="tab_profile_active" width="30" height="30"/>
-        <namedColor name="YPBackground">
+        <namedColor name="YP_Black">
             <color red="0.10196078431372549" green="0.10588235294117647" blue="0.13333333333333333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="YP_Gray">
+            <color red="0.68235294117647061" green="0.68627450980392157" blue="0.70588235294117652" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="YP_Red">
+            <color red="0.96078431372549022" green="0.41960784313725491" blue="0.42352941176470588" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="YP_White">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>
 </document>
