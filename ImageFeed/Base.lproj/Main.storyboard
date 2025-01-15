@@ -40,64 +40,10 @@
                     <view key="view" contentMode="scaleToFill" id="q2U-ys-oRJ">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="7os-3W-hC1">
-                                <rect key="frame" x="15.999999999999986" y="91" width="233.66666666666663" height="159"/>
-                                <subviews>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="profilepic" translatesAutoresizingMaskIntoConstraints="NO" id="PdS-jT-54s">
-                                        <rect key="frame" x="0.0" y="0.0" width="70" height="70"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="70" id="A8B-sL-ZZK"/>
-                                            <constraint firstAttribute="width" constant="70" id="MXJ-7h-zp3"/>
-                                        </constraints>
-                                    </imageView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Екатерина Новикова" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pPM-Tv-YCi">
-                                        <rect key="frame" x="0.0" y="80" width="233.66666666666666" height="27.666666666666671"/>
-                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="23"/>
-                                        <color key="textColor" name="YP_White"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="@ekaterina_nov" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YRY-af-IiC">
-                                        <rect key="frame" x="0.0" y="117.66666666666666" width="97" height="15.666666666666657"/>
-                                        <color key="tintColor" red="0.68235294117647061" green="0.68627450980392157" blue="0.70588235294117641" alpha="1" colorSpace="calibratedRGB"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                        <color key="textColor" name="YP_Gray"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hello, world!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SU7-mx-CaI">
-                                        <rect key="frame" x="0.0" y="143.33333333333334" width="75.666666666666671" height="15.666666666666657"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                        <color key="textColor" name="YP_White"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                </subviews>
-                            </stackView>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Exit" translatesAutoresizingMaskIntoConstraints="NO" id="VTb-OD-oov">
-                                <rect key="frame" x="345" y="114" width="24" height="24"/>
-                                <color key="tintColor" name="YP_Red"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="24" id="ubJ-1g-t2h"/>
-                                    <constraint firstAttribute="height" constant="24" id="xtm-XZ-wFS"/>
-                                </constraints>
-                            </imageView>
-                        </subviews>
                         <viewLayoutGuide key="safeArea" id="cJG-VJ-qvv"/>
                         <color key="backgroundColor" name="YP_Black"/>
-                        <constraints>
-                            <constraint firstItem="cJG-VJ-qvv" firstAttribute="trailing" secondItem="VTb-OD-oov" secondAttribute="trailing" constant="24" id="BI9-Oa-qFM"/>
-                            <constraint firstItem="7os-3W-hC1" firstAttribute="leading" secondItem="cJG-VJ-qvv" secondAttribute="leading" constant="16" id="Q6V-xU-mYb"/>
-                            <constraint firstItem="VTb-OD-oov" firstAttribute="top" secondItem="cJG-VJ-qvv" secondAttribute="top" constant="55" id="Sla-6r-LmJ"/>
-                            <constraint firstItem="7os-3W-hC1" firstAttribute="top" secondItem="cJG-VJ-qvv" secondAttribute="top" constant="32" id="a3f-a0-4am"/>
-                        </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="" image="tab_profile_active" id="LO9-j5-Mmu"/>
-                    <connections>
-                        <outlet property="exitButtonTapped" destination="VTb-OD-oov" id="Yz1-b4-3hJ"/>
-                        <outlet property="profilePicture" destination="PdS-jT-54s" id="qyf-tF-Zx9"/>
-                        <outlet property="userDescription" destination="SU7-mx-CaI" id="A8R-zW-0Cm"/>
-                        <outlet property="userName" destination="pPM-Tv-YCi" id="xej-bO-TE0"/>
-                        <outlet property="userNickname" destination="YRY-af-IiC" id="wOe-XM-bQe"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eeA-Bd-frf" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -295,21 +241,13 @@
     </scenes>
     <resources>
         <image name="0" width="1600" height="1059"/>
-        <image name="Exit" width="24" height="24"/>
         <image name="Sharing" width="51" height="51"/>
         <image name="backward" width="24" height="24"/>
         <image name="favorite_inactive" width="30" height="26"/>
-        <image name="profilepic" width="350" height="350"/>
         <image name="tab_main_active" width="30" height="30"/>
         <image name="tab_profile_active" width="30" height="30"/>
         <namedColor name="YP_Black">
             <color red="0.10196078431372549" green="0.10588235294117647" blue="0.13333333333333333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="YP_Gray">
-            <color red="0.68235294117647061" green="0.68627450980392157" blue="0.70588235294117652" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="YP_Red">
-            <color red="0.96078431372549022" green="0.41960784313725491" blue="0.42352941176470588" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="YP_White">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
