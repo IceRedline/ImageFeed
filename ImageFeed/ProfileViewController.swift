@@ -7,54 +7,60 @@
 
 import UIKit
 
-class ProfileViewController: UIViewController {
+final class ProfileViewController: UIViewController {
     
-    private var profilePicture = UIImageView()
-    private var userName = UILabel()
-    private var userNickname = UILabel()
-    private var userDescription = UILabel()
-    private var exitButton = UIButton()
+    private let profilePicture: UIImageView = {
+        let view = UIImageView()
+        let image = UIImage(named: "profilepic")
+        view.image = image
+        return view
+    }()
+    
+    private let userName: UILabel = {
+        let label = UILabel()
+        label.text = "Екатерина Новикова"
+        label.textColor = .ypWhite
+        label.font = UIFont.systemFont(ofSize: 23, weight: .bold)
+        return label
+    }()
+    
+    private let userNickname: UILabel = {
+        let label = UILabel()
+        label.text = "@ekaterina_nov"
+        label.textColor = .ypGray
+        label.font = UIFont.systemFont(ofSize: 13)
+        return label
+    }()
+    
+    private let userDescription: UILabel = {
+        let label = UILabel()
+        label.text = "Hello, world!"
+        label.textColor = .ypWhite
+        label.font = UIFont.systemFont(ofSize: 13)
+        return label
+    }()
+    
+    private let exitButton: UIButton = {
+        let button = UIButton.systemButton(
+            with: UIImage(systemName: "ipad.and.arrow.forward")!,
+            target: self,
+            action: nil
+        )
+        button.tintColor = .ypRed
+        return button
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        configViews()
         loadViews()
         loadConstraints()
-        
-    }
-    
-    private func configViews() {
-        if let picture = UIImage(named: "profilepic") {
-            profilePicture.image = picture
-        }
-        
-        userName.text = "Екатерина Новикова"
-        userName.textColor = .ypWhite
-        userName.font = UIFont.systemFont(ofSize: 23, weight: .bold)
-        
-        userNickname.text = "@ekaterina_nov"
-        userNickname.textColor = .ypGray
-        userNickname.font = UIFont.systemFont(ofSize: 13)
-        
-        userDescription.text = "Hello, world!"
-        userDescription.textColor = .ypWhite
-        userDescription.font = UIFont.systemFont(ofSize: 13)
-        
-        if let symbol = UIImage(systemName: "ipad.and.arrow.forward") {
-            exitButton = UIButton.systemButton(
-                with: symbol,
-                target: self,
-                action: nil
-            )
-        }
-        exitButton.tintColor = .ypRed
     }
     
     private func loadViews() {
-        [profilePicture, userName, userNickname, userDescription, exitButton].forEach { uiview in
-            uiview.translatesAutoresizingMaskIntoConstraints = false
-            view.addSubview(uiview)
+        [profilePicture, userName, userNickname, userDescription, exitButton].forEach {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            view.addSubview($0)
         }
     }
     
@@ -76,8 +82,4 @@ class ProfileViewController: UIViewController {
             exitButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20)
         ])
     }
-    
-    
-    
-    
 }

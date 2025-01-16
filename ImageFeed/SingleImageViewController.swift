@@ -7,18 +7,16 @@
 
 import UIKit
 
-class SingleImageViewController: UIViewController {
+final class SingleImageViewController: UIViewController {
     
     @IBOutlet private weak var imageView: UIImageView!
     @IBOutlet private weak var scrollView: UIScrollView!
     
     var image: UIImage? {
         didSet {
-            guard isViewLoaded else { return }
+            guard isViewLoaded, let image else { return }
             imageView.image = image
-            if let image {
-                rescaleAndCenterImageInScrollView(image: image)
-            }
+            rescaleAndCenterImageInScrollView(image: image)
         }
     }
     
@@ -54,10 +52,9 @@ class SingleImageViewController: UIViewController {
     
     
     @IBAction private func shareButtonTapped() {
-        if let image {
-            let avc = UIActivityViewController(activityItems: [image], applicationActivities: nil)
-            present(avc, animated: true)
-        }
+        guard let image else { return }
+        let activityViewController = UIActivityViewController(activityItems: [image], applicationActivities: nil)
+        present(activityViewController, animated: true)
     }
     
     @IBAction private func backButtonTapped() {
@@ -75,7 +72,7 @@ extension SingleImageViewController: UIScrollViewDelegate {
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
         let offsetX = max((scrollView.bounds.size.width - scrollView.contentSize.width) * 0.5, 0.0)
         let offsetY = max((scrollView.bounds.size.height - scrollView.contentSize.height) * 0.5, 0.0)
-
+        
         scrollView.contentInset = UIEdgeInsets(top: offsetY, left: offsetX, bottom: offsetY, right: offsetX);
     }
 }
