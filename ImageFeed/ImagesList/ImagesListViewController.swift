@@ -13,6 +13,7 @@ final class ImagesListViewController: UIViewController {
     
     private let photosNamesArray = Array(0..<20).map{ "\($0)" }
     private let currentDate = Date()
+    private let showSingleImageSegueID = "ShowSingleImage"
     
     private lazy var dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -20,6 +21,8 @@ final class ImagesListViewController: UIViewController {
         formatter.timeStyle = .none
         return formatter
     }()
+    
+    // MARK: - viewDidLoad
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,16 +33,37 @@ final class ImagesListViewController: UIViewController {
         tableView.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
     }
     
+    // MARK: - Methods
+    
     private func configCell(for cell: ImagesListCell, with indexPath: IndexPath) {
         let image = UIImage(named: photosNamesArray[indexPath.row])
         cell.cellImage.image = image
         
         cell.dateLabel.text = dateFormatter.string(from: currentDate)
         
-        let buttonImageName = indexPath.row % 2 == 0 ? "Active" : "No Active"
+        let buttonImageName = indexPath.row % 2 == 0 ? "favorite_active" : "favorite_inactive"
         cell.likeButton.setImage(UIImage(named: buttonImageName), for: .normal)
     }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == showSingleImageSegueID {
+            guard
+                let viewController = segue.destination as? SingleImageViewController,
+                let indexPath = sender as? IndexPath
+            else {
+                assertionFailure("Invalid segue destination")
+                return
+            }
+            
+            let image = UIImage(named: photosNamesArray[indexPath.row])
+            viewController.image = image
+        } else {
+            prepare(for: segue, sender: sender)
+        }
+    }
 }
+
+// MARK: - Extensions
 
 extension ImagesListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -63,6 +87,7 @@ extension ImagesListViewController: UITableViewDataSource {
 extension ImagesListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        performSegue(withIdentifier: showSingleImageSegueID, sender: indexPath)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
