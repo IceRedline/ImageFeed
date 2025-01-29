@@ -15,6 +15,7 @@ final class OAuth2Service {
     
     private func makeOauthTokenRequest(code: String) -> URLRequest? {
         guard let baseURL = URL(string: "https://unsplash.com") else {
+            print("Ошибка: невозможно создать baseURL")
             return nil
         }
         
@@ -25,6 +26,7 @@ final class OAuth2Service {
                             + "&&code=\(code)"
                             + "&&grant_type=authorization_code",
                             relativeTo: baseURL) else {
+            print("Ошибка: невозможно создать URL для запроса токена")
             return nil
         }
         
@@ -42,7 +44,9 @@ final class OAuth2Service {
             return
         }
         
-        let task = URLSession.shared.data(for: request) { result in
+        let task = URLSession.shared.data(for: request) { [weak self] result in
+            guard let self = self else { return }
+            
             switch result {
             case .success(let data):
                 do {

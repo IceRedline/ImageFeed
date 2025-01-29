@@ -134,6 +134,7 @@
 		993FCC572D425E8C00C91D4B /* Auth */ = {
 			isa = PBXGroup;
 			children = (
+				993FCC7A2D49051100C91D4B /* AuthViewControllerDelegate.swift */,
 				993FCC552D425E3300C91D4B /* AuthViewController.swift */,
 				993FCC612D4264DD00C91D4B /* WebViewViewController.swift */,
 			);
@@ -174,7 +175,6 @@
 			children = (
 				993FCC632D427DF400C91D4B /* WebViewViewControllerDelegate.swift */,
 				993FCC722D47DAEF00C91D4B /* OAuthTokenResponseBody.swift */,
-				993FCC7A2D49051100C91D4B /* AuthViewControllerDelegate.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";

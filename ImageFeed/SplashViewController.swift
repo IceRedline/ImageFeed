@@ -37,18 +37,13 @@ class SplashViewController: UIViewController {
 extension SplashViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-        if segue.identifier == authSegueID {
-            guard
-                let navigationController = segue.destination as? UINavigationController,
-                let viewController = navigationController.viewControllers[0] as? AuthViewController
-            else {
-                assertionFailure("Failed to prepare for \(authSegueID)")
-                return
-            }
-            viewController.delegate = self
-        } else {
+        guard segue.identifier == authSegueID,
+              let navigationController = segue.destination as? UINavigationController,
+              let viewController = navigationController.viewControllers[0] as? AuthViewController else {
             super.prepare(for: segue, sender: sender)
+            return
         }
+        viewController.delegate = self
     }
 }
 
