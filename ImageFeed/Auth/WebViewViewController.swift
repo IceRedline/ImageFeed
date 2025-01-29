@@ -104,6 +104,7 @@ extension WebViewViewController: WKNavigationDelegate {
         {
             return codeItem.value
         } else {
+            print("Не удалось получить code из url")
             return nil
         }
     }
