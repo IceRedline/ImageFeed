@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import ProgressHUD
 
 class AuthViewController: UIViewController {
     
@@ -46,10 +47,12 @@ class AuthViewController: UIViewController {
 extension AuthViewController: WebViewViewControllerDelegate {
     
     func webViewViewController(_ vc: WebViewViewController, didAuthenticateWithCode code: String) {
+        UIBlockingProgressHUD.show()
         vc.dismiss(animated: true) { [weak self] in
             guard let self = self else { return }
             self.oauth2service.fetchOAuthToken(code: code) { result in
                 DispatchQueue.main.async {
+                    UIBlockingProgressHUD.dismiss()
                     switch result {
                     case .success(let token):
                         print("Token accepted: \(token)")

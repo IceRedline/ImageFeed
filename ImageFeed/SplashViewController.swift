@@ -11,6 +11,7 @@ class SplashViewController: UIViewController {
     
     private var storage = OAuth2TokenStorage()
     private let authSegueID = "authNotCompleted"
+    private let profileService = ProfileService.shared
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -18,6 +19,7 @@ class SplashViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         if let token = storage.token {
+            fetchProfile(token)
             switchToTabBarController()
         } else {
             performSegue(withIdentifier: authSegueID, sender: nil)
@@ -31,6 +33,26 @@ class SplashViewController: UIViewController {
         }
         let tabBarController = UIStoryboard(name: "Main", bundle: .main).instantiateViewController(withIdentifier: "TabBarViewController")
         window.rootViewController = tabBarController
+    }
+    
+    private func fetchProfile(_ token: String) {
+        UIBlockingProgressHUD.show()
+        
+        guard let token = storage.token else { return }
+        
+        profileService.fetchProfile(token) { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success:
+                    UIBlockingProgressHUD.dismiss()
+                    self.switchToTabBarController()
+                    print("Profile loaded!")
+                case .failure(let error):
+                    print("Failed to load profile: \(error.localizedDescription)")
+                    break
+                }
+            }
+        }
     }
 }
 
@@ -51,5 +73,8 @@ extension SplashViewController: AuthViewControllerDelegate {
     func didAuthenticate(_ vc: AuthViewController) {
         vc.dismiss(animated: true)
         switchToTabBarController()
+        
+        guard let token = storage.token else { return }
+        fetchProfile(token)
     }
 }

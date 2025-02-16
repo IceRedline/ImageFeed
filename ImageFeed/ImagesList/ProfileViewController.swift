@@ -50,11 +50,16 @@ final class ProfileViewController: UIViewController {
         return button
     }()
     
+    private let storage = OAuth2TokenStorage()
+    private let profileService = ProfileService.shared
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         loadViews()
         loadConstraints()
+        updateProfileDetails(with: profileService.profile!)
     }
     
     private func loadViews() {
@@ -81,5 +86,11 @@ final class ProfileViewController: UIViewController {
             exitButton.centerYAnchor.constraint(equalTo: profilePicture.centerYAnchor),
             exitButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20)
         ])
+    }
+    
+    private func updateProfileDetails(with profile: Profile) {
+        userName.text = profile.name
+        userNickname.text = profile.loginName
+        userDescription.text = profile.bio
     }
 }

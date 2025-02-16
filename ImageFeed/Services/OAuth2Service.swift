@@ -7,9 +7,17 @@
 
 import Foundation
 
+enum AuthServiceError: Error {
+    case invalidRequest
+}
+
 final class OAuth2Service {
     static let shared = OAuth2Service()
     private let tokenStorage = OAuth2TokenStorage()
+    private let urlSession = URLSession.shared
+    
+    private var task: URLSessionTask?
+    private var lastCode: String?
     
     private init() {}
     
@@ -36,6 +44,15 @@ final class OAuth2Service {
     }
     
     func fetchOAuthToken(code: String, completion: @escaping (Result<String, Error>) -> Void) {
+        assert(Thread.isMainThread)
+        guard lastCode != code else {
+            completion(.failure(AuthServiceError.invalidRequest))
+            return
+        }
+        
+        task?.cancel()
+        lastCode = code
+        
         guard let request = makeOauthTokenRequest(code: code) else {
             logError(NetworkError.urlSessionError)
             DispatchQueue.main.async {
@@ -47,36 +64,32 @@ final class OAuth2Service {
         let task = URLSession.shared.data(for: request) { [weak self] result in
             guard let self = self else { return }
             
-            switch result {
-            case .success(let data):
-                do {
-                    let responseBody = try JSONDecoder().decode(OAuthTokenResponseBody.self, from: data)
-                    
-                    if let error = responseBody.error {
-                        print("Service Error: \(error)")
-                        DispatchQueue.main.async {
-                            completion(.failure(NetworkError.urlRequestError(URLError(.badServerResponse))))
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let data):
+                    do {
+                        let responseBody = try JSONDecoder().decode(OAuthTokenResponseBody.self, from: data)
+                        
+                        if let error = responseBody.error {
+                            print("Service Error: \(error)")
+                                completion(.failure(NetworkError.urlRequestError(URLError(.badServerResponse))))
+                            return
                         }
-                        return
+                        self.tokenStorage.token = responseBody.accessToken
+                            completion(.success(responseBody.accessToken))
+                    } catch {
+                        print("Decoding Error: \(error.localizedDescription)")
+                            completion(.failure(error))
                     }
-                    
-                    self.tokenStorage.token = responseBody.accessToken
-                    DispatchQueue.main.async {
-                        completion(.success(responseBody.accessToken))
-                    }
-                } catch {
-                    print("Decoding Error: \(error.localizedDescription)")
-                    DispatchQueue.main.async {
+                case .failure(let error):
+                    self.logError(error)
                         completion(.failure(error))
-                    }
                 }
-            case .failure(let error):
-                self.logError(error)
-                DispatchQueue.main.async {
-                    completion(.failure(error))
-                }
+                self.task = nil
+                self.lastCode = nil
             }
         }
+        self.task = task
         task.resume()
     }
     
