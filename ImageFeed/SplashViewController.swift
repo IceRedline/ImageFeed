@@ -20,6 +20,7 @@ class SplashViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         if let token = storage.token {
             fetchProfile(token)
+            ProfileImageService.shared.fetchProfileImageURL(username: profileService.profile?.userName ?? "no username") { _ in }
             switchToTabBarController()
         } else {
             performSegue(withIdentifier: authSegueID, sender: nil)

@@ -61,10 +61,32 @@ final class OAuth2Service {
             return
         }
         
+        let session = URLSession.shared
+        let task = session.objectTask(for: request) { [weak self] (result: Result<OAuthTokenResponseBody, Error>) in
+            guard let self = self else { return }
+            
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let responseBody):
+                    self.tokenStorage.token = responseBody.accessToken
+                    completion(.success(responseBody.accessToken))
+                case .failure(let error):
+                    self.logError(error)
+                    completion(.failure(error))
+                }
+                self.task = nil
+                self.lastCode = nil
+            }
+        }
+        self.task = task
+        task.resume()
+        
+        /*
         let task = URLSession.shared.data(for: request) { [weak self] result in
             guard let self = self else { return }
             
             DispatchQueue.main.async {
+                
                 switch result {
                 case .success(let data):
                     do {
@@ -88,9 +110,11 @@ final class OAuth2Service {
                 self.task = nil
                 self.lastCode = nil
             }
+                 
         }
         self.task = task
         task.resume()
+         */
     }
     
     private func logError(_ error: Error) {

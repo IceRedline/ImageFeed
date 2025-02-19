@@ -59,6 +59,10 @@ extension AuthViewController: WebViewViewControllerDelegate {
                         self.delegate?.didAuthenticate(self)
                     case .failure(let error):
                         print("Failed to fetch token: \(error.localizedDescription)")
+                        let alert = UIAlertController(title: "Что-то пошло не так", message: "Не удалось войти в систему", preferredStyle: .alert)
+                        let action = UIAlertAction(title: "Oк", style: .default)
+                        alert.addAction(action)
+                        self.present(alert, animated: true)
                     }
                 }
             }

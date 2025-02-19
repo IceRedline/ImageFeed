@@ -53,6 +53,7 @@ final class ProfileViewController: UIViewController {
     private let storage = OAuth2TokenStorage()
     private let profileService = ProfileService.shared
     
+    private var profileImageServiceObserver: NSObjectProtocol?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -60,6 +61,16 @@ final class ProfileViewController: UIViewController {
         loadViews()
         loadConstraints()
         updateProfileDetails(with: profileService.profile!)
+        
+        profileImageServiceObserver = NotificationCenter.default.addObserver(
+            forName: ProfileImageService.didChangeNotification,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            guard let self = self else { return }
+            //self.updateAvatar
+        }
+        updateAvatar()
     }
     
     private func loadViews() {
@@ -92,5 +103,12 @@ final class ProfileViewController: UIViewController {
         userName.text = profile.name
         userNickname.text = profile.loginName
         userDescription.text = profile.bio
+    }
+    
+    private func updateAvatar() {
+        guard
+            let profileImageURL = ProfileImageService.shared.avatarURL,
+            let url = URL(string: profileImageURL)
+        else { return }
     }
 }

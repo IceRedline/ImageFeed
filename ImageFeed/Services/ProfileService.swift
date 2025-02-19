@@ -36,6 +36,21 @@ final class ProfileService {
                 completion(.failure(NetworkError.urlRequestError(URLError(.badServerResponse))))
                 return
             }
+            
+            let task = URLSession.shared.objectTask(for: request) { [weak self] (result: Result<ProfileResult, Error>) in
+                guard let self = self else { return }
+                
+                switch result {
+                case .success(let profileResult):
+                    self.profile = Profile(profileResult: profileResult)
+                    completion(.success(self.profile!))
+                case .failure(let error):
+                    completion(.failure(error))
+                }
+            }
+            task.resume()
+            
+            /*
             URLSession.shared.dataTask(with: request) { data, response, error in
                 if let error = error {
                     completion(.failure(error))
@@ -60,7 +75,7 @@ final class ProfileService {
                     completion(.failure(error))
                 }
             }.resume()
-            
+            */
         }
     }
 
