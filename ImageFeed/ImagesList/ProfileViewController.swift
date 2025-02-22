@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 final class ProfileViewController: UIViewController {
     
@@ -68,12 +69,13 @@ final class ProfileViewController: UIViewController {
             queue: .main
         ) { [weak self] _ in
             guard let self = self else { return }
-            //self.updateAvatar
+            self.updateAvatar()
         }
         updateAvatar()
     }
     
     private func loadViews() {
+        view.backgroundColor = .ypBlack
         [profilePicture, userName, userNickname, userDescription, exitButton].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview($0)
@@ -106,9 +108,12 @@ final class ProfileViewController: UIViewController {
     }
     
     private func updateAvatar() {
+        let imageProcessor = RoundCornerImageProcessor(cornerRadius: 30)
         guard
             let profileImageURL = ProfileImageService.shared.avatarURL,
             let url = URL(string: profileImageURL)
         else { return }
+        print("url: \(ProfileImageService.shared.avatarURL)")
+        profilePicture.kf.setImage(with: url, placeholder: UIImage.stub, options: [.processor(imageProcessor)])
     }
 }

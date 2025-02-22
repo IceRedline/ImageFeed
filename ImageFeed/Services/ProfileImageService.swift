@@ -65,46 +65,18 @@ final class ProfileImageService {
                 case .success(let imageResult):
                     self.avatarURL = imageResult.profileImage.small
                     completion(.success(self.avatarURL!))
+                    print("Parsed avatar URL: \(String(describing: avatarURL))")
+                    
+                    NotificationCenter.default.post(
+                        name: ProfileImageService.didChangeNotification,
+                        object: self,
+                        userInfo: ["URL" : self.avatarURL!]
+                    )
                 case .failure(let error):
                     completion(.failure(error))
                 }
             }
             task.resume()
-            
-            /*
-            URLSession.shared.dataTask(with: request) { data, response, error in
-                if let error = error {
-                    completion(.failure(error))
-                    return
-                }
-                
-                guard let httpResponse = response as? HTTPURLResponse,
-                      (200..<300).contains(httpResponse.statusCode) else {
-                    completion(.failure(NetworkError.invalidResponse))
-                    return
-                }
-                
-                guard let data = data else {
-                    completion(.failure(NetworkError.noData))
-                    return
-                }
-                
-                do {
-                    let imageResult = try JSONDecoder().decode(UserResult.self, from: data)
-                    self.avatarURL = imageResult.profileImage.small
-                    completion(.success(self.avatarURL!))
-                } catch {
-                    completion(.failure(error))
-                }
-                
-                NotificationCenter.default.post(
-                    name: ProfileImageService.didChangeNotification,
-                    object: self,
-                    userInfo: ["URL" : self.avatarURL]
-                )
-            }
-            self.currentTask?.resume()
-             */
         }
     }
 }

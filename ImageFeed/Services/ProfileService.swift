@@ -49,34 +49,6 @@ final class ProfileService {
                 }
             }
             task.resume()
-            
-            /*
-            URLSession.shared.dataTask(with: request) { data, response, error in
-                if let error = error {
-                    completion(.failure(error))
-                    return
-                }
-                
-                guard let httpResponse = response as? HTTPURLResponse, (200..<300).contains(httpResponse.statusCode) else {
-                    completion(.failure(NetworkError.invalidResponse))
-                    return
-                }
-                
-                guard let data = data else {
-                    completion(.failure(NetworkError.noData))
-                    return
-                }
-                
-                do {
-                    let profileResult = try JSONDecoder().decode(ProfileResult.self, from: data)
-                    self.profile = Profile(profileResult: profileResult)
-                    completion(.success(self.profile!))
-                } catch {
-                    completion(.failure(error))
-                }
-            }.resume()
-            */
         }
     }
-
 }

@@ -9,22 +9,58 @@ import UIKit
 
 class SplashViewController: UIViewController {
     
+    let logoImage = {
+        let view = UIImageView()
+        view.image = UIImage(named: "yp_logo")
+        return view
+    }()
+    
     private var storage = OAuth2TokenStorage()
-    private let authSegueID = "authNotCompleted"
     private let profileService = ProfileService.shared
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        view.backgroundColor = .ypBlack
+        logoImage.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(logoImage)
+        loadConstraints()
     }
     
     override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
         if let token = storage.token {
-            fetchProfile(token)
-            ProfileImageService.shared.fetchProfileImageURL(username: profileService.profile?.userName ?? "no username") { _ in }
-            switchToTabBarController()
+            profileService.fetchProfile(token) { result in
+                switch result {
+                case .success(let profile):
+                    DispatchQueue.main.async {
+                        print("Профиль загружен: \(profile)")
+                        ProfileImageService.shared.fetchProfileImageURL(username: profile.userName!) { _ in }
+                        self.switchToTabBarController()
+                    }
+                case .failure(let error):
+                    print("Ошибка загрузки профиля: \(error)")
+                }
+            }
         } else {
-            performSegue(withIdentifier: authSegueID, sender: nil)
+            if let authVC = UIStoryboard(name: "Main", bundle: .main).instantiateViewController(withIdentifier: "AuthViewController") as? AuthViewController {
+                authVC.delegate = self
+                authVC.modalPresentationStyle = .fullScreen
+                present(authVC, animated: true)
+            }
         }
+    }
+    
+    // MARK: - Methods
+    
+    private func loadConstraints() {
+        NSLayoutConstraint.activate([
+            logoImage.widthAnchor.constraint(equalToConstant: 75),
+            logoImage.heightAnchor.constraint(equalToConstant: 77.68),
+            logoImage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            logoImage.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
     }
     
     private func switchToTabBarController() {
@@ -34,6 +70,7 @@ class SplashViewController: UIViewController {
         }
         let tabBarController = UIStoryboard(name: "Main", bundle: .main).instantiateViewController(withIdentifier: "TabBarViewController")
         window.rootViewController = tabBarController
+        //window.makeKeyAndVisible()
     }
     
     private func fetchProfile(_ token: String) {
@@ -54,19 +91,6 @@ class SplashViewController: UIViewController {
                 }
             }
         }
-    }
-}
-
-extension SplashViewController {
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
-        guard segue.identifier == authSegueID,
-              let navigationController = segue.destination as? UINavigationController,
-              let viewController = navigationController.viewControllers[0] as? AuthViewController else {
-            super.prepare(for: segue, sender: sender)
-            return
-        }
-        viewController.delegate = self
     }
 }
 
