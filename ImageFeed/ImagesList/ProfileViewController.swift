@@ -10,7 +10,7 @@ import Kingfisher
 
 final class ProfileViewController: UIViewController {
     
-    private let profilePicture: UIImageView = {
+    private lazy var profilePicture: UIImageView = {
         let view = UIImageView()
         let image = UIImage(named: "profilepic")
         view.image = image
@@ -108,12 +108,14 @@ final class ProfileViewController: UIViewController {
     }
     
     private func updateAvatar() {
-        let imageProcessor = RoundCornerImageProcessor(cornerRadius: 30)
         guard
             let profileImageURL = ProfileImageService.shared.avatarURL,
             let url = URL(string: profileImageURL)
         else { return }
         print("url: \(ProfileImageService.shared.avatarURL)")
-        profilePicture.kf.setImage(with: url, placeholder: UIImage.stub, options: [.processor(imageProcessor)])
+        profilePicture.kf.setImage(with: url, placeholder: UIImage.stub)
+        profilePicture.layoutIfNeeded()
+        profilePicture.layer.cornerRadius = profilePicture.frame.width / 2
+        profilePicture.clipsToBounds = true
     }
 }

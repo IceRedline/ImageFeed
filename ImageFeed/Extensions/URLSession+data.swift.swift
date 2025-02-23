@@ -52,21 +52,26 @@ extension URLSession {
     ) -> URLSessionTask {
         let decoder = JSONDecoder()
         let task = data(for: request) { (result: Result<Data, Error>) in
-            
-            switch result {
-            case .success(let data):
-                do {
-                    let decodedObject = try decoder.decode(T.self, from: data)
-                    completion(.success(decodedObject))
-                } catch {
-                    print("Ошибка декодирования: \(error.localizedDescription), Данные: \(String(data: data, encoding: .utf8) ?? "")")
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let data):
+                    do {
+                        let decodedObject = try decoder.decode(T.self, from: data)
+                        completion(.success(decodedObject))
+                    } catch {
+                        self.logError("[objectTask]: DecodingError - \(error.localizedDescription), Data: \(String(data: data, encoding: .utf8) ?? "nil")")
+                        completion(.failure(error))
+                    }
+                case .failure(let error):
+                    self.logError("[objectTask]: NetworkError - \(error.localizedDescription) (URL: \(request.url?.absoluteString ?? "nil"))")
                     completion(.failure(error))
                 }
-            case .failure(let error):
-                print("Request Error: \(error.localizedDescription)")
-                completion(.failure(error))
             }
         }
         return task
+    }
+
+    private func logError(_ message: String) {
+        print(message)
     }
 }

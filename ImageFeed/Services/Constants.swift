@@ -14,7 +14,7 @@ enum Constants {
     static let accessScope = "public+read_user+write_likes"
     static let defaultBaseURL: URL = {
         guard let url = URL(string: "https://api.unsplash.com/") else {
-            print("Error: Invalid URL for Unsplash API")
+            print("[Constants]: fatalError - failed to create base URL")
             fatalError("Invalid base URL for Unsplash API")
         }
         return url

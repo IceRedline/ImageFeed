@@ -7,18 +7,6 @@
 
 import Foundation
 
-struct UserResult: Codable {
-    let profileImage: ProfileImage
-    
-    enum CodingKeys: String, CodingKey {
-        case profileImage = "profile_image"
-    }
-}
-
-struct ProfileImage: Codable {
-    let small: String
-}
-
 final class ProfileImageService {
     
     static let didChangeNotification = Notification.Name(rawValue: "ProfileImageProviderDidChange")
@@ -34,12 +22,10 @@ final class ProfileImageService {
     
     private func requestImageURL(username: String) -> URLRequest? {
         
-        guard let baseURL = URL(string: "https://api.unsplash.com/") else {
-            print("Невозомжно создать baseURL")
-            return nil
-        }
+        let baseURL = Constants.defaultBaseURL
+                
         guard let url = URL(string: "users/" + username, relativeTo: baseURL) else {
-            print("Не удалось создать запрос профиля")
+            logError("[requestImageURL]: NetworkError - failed to create profile request (username: \(username))")
             return nil
         }
         
@@ -54,7 +40,7 @@ final class ProfileImageService {
             guard let self = self, self.currentTask == nil else { return }
             
             guard let request = requestImageURL(username: username) else {
-                print("Не получен запрос для изображения")
+                logError("[fetchProfileImageURL]: NetworkError - failed to create request (username: \(username))")
                 return
             }
             
@@ -65,7 +51,7 @@ final class ProfileImageService {
                 case .success(let imageResult):
                     self.avatarURL = imageResult.profileImage.small
                     completion(.success(self.avatarURL!))
-                    print("Parsed avatar URL: \(String(describing: avatarURL))")
+                    print("[fetchProfileImageURL]: Success - avatar URL: \(self.avatarURL!)")
                     
                     NotificationCenter.default.post(
                         name: ProfileImageService.didChangeNotification,
@@ -73,10 +59,15 @@ final class ProfileImageService {
                         userInfo: ["URL" : self.avatarURL!]
                     )
                 case .failure(let error):
+                    logError("[fetchProfileImageURL]: NetworkError - \(error.localizedDescription) (username: \(username))")
                     completion(.failure(error))
                 }
             }
             task.resume()
         }
+    }
+    
+    private func logError(_ message: String) {
+        print(message)
     }
 }

@@ -42,7 +42,7 @@ class WebViewViewController: UIViewController {
     
     private func loadAuthView() {
         guard var urlComponents = URLComponents(string: WebViewConstants.unsplashAuthorizeString) else {
-            print("Ссылка не была сформирована")
+            logError("[loadAuthView]: URLFormationError - Не удалось создать URLComponents")
             return
         }
         
@@ -54,7 +54,7 @@ class WebViewViewController: UIViewController {
         ]
         
         guard let url = urlComponents.url else {
-            print("Ссылка с запросами не была сформирована")
+            logError("[loadAuthView]: URLFormationError - Не удалось сформировать финальный URL")
             return
         }
         
@@ -87,8 +87,12 @@ extension WebViewViewController: WKNavigationDelegate {
         {
             return codeItem.value
         } else {
-            print("Не удалось получить code из url")
+            logError("[code]: URLParsingError - Не удалось получить code из URL: \(navigationAction.request.url?.absoluteString ?? "nil")")
             return nil
         }
+    }
+    
+    private func logError(_ message: String) {
+        print(message)
     }
 }

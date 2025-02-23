@@ -6,10 +6,11 @@
 //
 
 import UIKit
+import SwiftKeychainWrapper
 
-class SplashViewController: UIViewController {
+final class SplashViewController: UIViewController {
     
-    let logoImage = {
+    private let logoImage = {
         let view = UIImageView()
         view.image = UIImage(named: "yp_logo")
         return view
@@ -20,7 +21,7 @@ class SplashViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        //KeychainWrapper.standard.remove(forKey: "BearerToken")
         view.backgroundColor = .ypBlack
         logoImage.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(logoImage)
@@ -82,13 +83,13 @@ class SplashViewController: UIViewController {
             DispatchQueue.main.async {
                 switch result {
                 case .success:
-                    UIBlockingProgressHUD.dismiss()
                     self.switchToTabBarController()
                     print("Profile loaded!")
                 case .failure(let error):
                     print("Failed to load profile: \(error.localizedDescription)")
                     break
                 }
+                UIBlockingProgressHUD.dismiss()
             }
         }
     }
