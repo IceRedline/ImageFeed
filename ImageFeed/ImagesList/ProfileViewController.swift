@@ -6,10 +6,11 @@
 //
 
 import UIKit
+import Kingfisher
 
 final class ProfileViewController: UIViewController {
     
-    private let profilePicture: UIImageView = {
+    private lazy var profilePicture: UIImageView = {
         let view = UIImageView()
         let image = UIImage(named: "profilepic")
         view.image = image
@@ -50,14 +51,31 @@ final class ProfileViewController: UIViewController {
         return button
     }()
     
+    private let storage = OAuth2TokenStorage()
+    private let profileService = ProfileService.shared
+    
+    private var profileImageServiceObserver: NSObjectProtocol?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         loadViews()
         loadConstraints()
+        updateProfileDetails(with: profileService.profile!)
+        
+        profileImageServiceObserver = NotificationCenter.default.addObserver(
+            forName: ProfileImageService.didChangeNotification,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            guard let self = self else { return }
+            self.updateAvatar()
+        }
+        updateAvatar()
     }
     
     private func loadViews() {
+        view.backgroundColor = .ypBlack
         [profilePicture, userName, userNickname, userDescription, exitButton].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview($0)
@@ -81,5 +99,23 @@ final class ProfileViewController: UIViewController {
             exitButton.centerYAnchor.constraint(equalTo: profilePicture.centerYAnchor),
             exitButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20)
         ])
+    }
+    
+    private func updateProfileDetails(with profile: Profile) {
+        userName.text = profile.name
+        userNickname.text = profile.loginName
+        userDescription.text = profile.bio
+    }
+    
+    private func updateAvatar() {
+        guard
+            let profileImageURL = ProfileImageService.shared.avatarURL,
+            let url = URL(string: profileImageURL)
+        else { return }
+        print("url: \(ProfileImageService.shared.avatarURL)")
+        profilePicture.kf.setImage(with: url, placeholder: UIImage.stub)
+        profilePicture.layoutIfNeeded()
+        profilePicture.layer.cornerRadius = profilePicture.frame.width / 2
+        profilePicture.clipsToBounds = true
     }
 }

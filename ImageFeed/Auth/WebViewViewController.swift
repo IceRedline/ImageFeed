@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import WebKit
+@preconcurrency import WebKit
 
 enum WebViewConstants {
     static let unsplashAuthorizeString = "https://unsplash.com/oauth/authorize"
@@ -15,8 +15,9 @@ enum WebViewConstants {
 class WebViewViewController: UIViewController {
     
     @IBOutlet private var webView: WKWebView!
-    @IBOutlet weak var progressView: UIProgressView!
+    @IBOutlet private weak var progressView: UIProgressView!
     
+    private var estimatedProgressObservaiton: NSKeyValueObservation?
     weak var delegate: WebViewViewControllerDelegate?
     
     override func viewDidLoad() {
@@ -24,32 +25,14 @@ class WebViewViewController: UIViewController {
         
         webView.navigationDelegate = self
         loadAuthView()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        webView.addObserver(
-            self,
-            forKeyPath: #keyPath(WKWebView.estimatedProgress),
-            options: .new,
-            context: nil
+        
+        estimatedProgressObservaiton = webView.observe(
+            \.estimatedProgress,
+             changeHandler: { [weak self] _, _ in
+                 guard let self = self else { return }
+                 self.updateProgress()
+             }
         )
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        webView.removeObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress))
-    }
-    
-    override func observeValue(
-        forKeyPath keyPath: String?,
-        of object: Any?,
-        change: [NSKeyValueChangeKey : Any]?,
-        context: UnsafeMutableRawPointer?
-    ) {
-        if keyPath == #keyPath(WKWebView.estimatedProgress) {
-            updateProgress()
-        } else {
-            super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
-        }
     }
     
     private func updateProgress() {
@@ -59,7 +42,7 @@ class WebViewViewController: UIViewController {
     
     private func loadAuthView() {
         guard var urlComponents = URLComponents(string: WebViewConstants.unsplashAuthorizeString) else {
-            print("Ссылка не была сформирована")
+            logError("[loadAuthView]: URLFormationError - Не удалось создать URLComponents")
             return
         }
         
@@ -71,7 +54,7 @@ class WebViewViewController: UIViewController {
         ]
         
         guard let url = urlComponents.url else {
-            print("Ссылка с запросами не была сформирована")
+            logError("[loadAuthView]: URLFormationError - Не удалось сформировать финальный URL")
             return
         }
         
@@ -104,8 +87,12 @@ extension WebViewViewController: WKNavigationDelegate {
         {
             return codeItem.value
         } else {
-            print("Не удалось получить code из url")
+            logError("[code]: URLParsingError - Не удалось получить code из URL: \(navigationAction.request.url?.absoluteString ?? "nil")")
             return nil
         }
+    }
+    
+    private func logError(_ message: String) {
+        print(message)
     }
 }
