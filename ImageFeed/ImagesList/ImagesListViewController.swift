@@ -79,7 +79,7 @@ extension ImagesListViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         
-        configCell(for: imageListCell, with: indexPath) // 3
+        configCell(for: imageListCell, with: indexPath)
         return imageListCell
     }
 }
@@ -96,5 +96,11 @@ extension ImagesListViewController: UITableViewDelegate {
         let imageHeight = image.size.height
         let tableWidth = tableView.bounds.width
         return (imageHeight / imageWidth) * tableWidth
+    }
+}
+
+extension ImagesListViewController {
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        ImagesListService().fetchPhotosNextPage()
     }
 }
