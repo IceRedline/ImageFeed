@@ -15,7 +15,7 @@ final class ImagesListService {
     
     static let didChangeNotification = Notification.Name(rawValue: "ImagesListServiceDidChange")
     
-    func fetchPhotosNextPage(completion: @escaping (Result<[Photo], Error>) -> Void) {
+    func fetchPhotosNextPage() {
         guard task == nil else { return }
         
         let nextPage = (lastLoadedPage ?? 0) + 1
@@ -26,29 +26,36 @@ final class ImagesListService {
         }
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
+        request.setValue("Bearer \(OAuth2TokenStorage().token ?? "no token")", forHTTPHeaderField: "Authorization")
         
         let task = URLSession.shared.objectTask(for: request) { [weak self] (result: Result<[PhotoResult], Error>) in
             guard let self = self else { return }
-
-            DispatchQueue.main.async {
-
+            
                 switch result {
                 case .success(let photoResults):
-                    let newPhotos = photoResults.map { Photo(photoResult: $0) }
+                    // Преобразуем PhotoResult в Photo
+                    let newPhotos = photoResults.map { photoResult in
+                        Photo(photoResult: photoResult)
+                    }
+                    
                     self.photos.append(contentsOf: newPhotos)
                     self.lastLoadedPage = nextPage
                     
-                    NotificationCenter.default.post(name: Self.didChangeNotification, object: self)
+                    NotificationCenter.default.post(
+                        name: ImagesListService.didChangeNotification,
+                        object: self
+                    )
+
+                    print("Notification posted")
                     
                 case .failure(let error):
                     self.logError("[fetchPhotosNextPage]: NetworkError - \(error.localizedDescription)")
                 }
                 self.task = nil
-            }
+            
         }
         self.task = task
         task.resume()
-        self.lastLoadedPage = nextPage
     }
     
     private func logError(_ message: String) {
