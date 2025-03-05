@@ -8,7 +8,7 @@
 import Foundation
 
 struct Photo {
-    let photoResult: PhotoResult
+    var photoResult: PhotoResult
     
     var id: String {
         return photoResult.id
@@ -27,7 +27,7 @@ struct Photo {
     }
     
     var thumbImageURL: String {
-        return photoResult.urls.thumb
+        return photoResult.urls.small
     }
     
     var fullImagevarURL: String {
@@ -35,7 +35,8 @@ struct Photo {
     }
     
     var isLiked: Bool {
-        return photoResult.likedByUser
+        get { photoResult.likedByUser }
+        set { photoResult.likedByUser = newValue } 
     }
     
     init(photoResult: PhotoResult) {

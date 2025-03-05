@@ -6,9 +6,10 @@
 //
 
 import UIKit
+import Kingfisher
 
 final class ImagesListCell: UITableViewCell {
-
+    
     // MARK: - @IBOutlet properties
     
     @IBOutlet weak var cellImage: UIImageView!
@@ -18,5 +19,22 @@ final class ImagesListCell: UITableViewCell {
     // MARK: - Static properties
     
     static let reuseIDentifier = "ImagesListCell"
-
+    
+    weak var delegate: ImagesListCellDelegate?
+    
+    // MARK: - prepare for reuse
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        cellImage.kf.cancelDownloadTask()
+    }
+    
+    @IBAction private func likeButtonClicked() {
+        delegate?.imageListCellDidTapLike(self)
+    }
+    
+    func setIsLiked(_ liked: Bool) {
+        likeButton.setImage(liked ? UIImage.favoriteActive : UIImage.favoriteInactive, for: .normal)
+    }
+    
 }

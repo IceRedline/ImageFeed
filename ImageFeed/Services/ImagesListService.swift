@@ -8,12 +8,15 @@
 import Foundation
 
 final class ImagesListService {
-    private(set) var photos: [Photo] = []
     
     private var lastLoadedPage: Int?
     private var task: URLSessionTask? = nil
     
     static let didChangeNotification = Notification.Name(rawValue: "ImagesListServiceDidChange")
+    
+    var photos: [Photo] = []
+    
+    // MARK: - Methods
     
     func fetchPhotosNextPage() {
         guard task == nil else { return }
@@ -31,28 +34,69 @@ final class ImagesListService {
         let task = URLSession.shared.objectTask(for: request) { [weak self] (result: Result<[PhotoResult], Error>) in
             guard let self = self else { return }
             
-                switch result {
-                case .success(let photoResults):
-                    // Преобразуем PhotoResult в Photo
-                    let newPhotos = photoResults.map { photoResult in
-                        Photo(photoResult: photoResult)
-                    }
-                    
-                    self.photos.append(contentsOf: newPhotos)
-                    self.lastLoadedPage = nextPage
-                    
-                    NotificationCenter.default.post(
-                        name: ImagesListService.didChangeNotification,
-                        object: self
-                    )
-
-                    print("Notification posted")
-                    
-                case .failure(let error):
-                    self.logError("[fetchPhotosNextPage]: NetworkError - \(error.localizedDescription)")
+            switch result {
+            case .success(let photoResults):
+                print("Все полученные фото (до фильтрации): \(photoResults.map { $0.id })")
+                // Преобразуем PhotoResult в Photo
+                let newPhotos = photoResults.map { photoResult in
+                    Photo(photoResult: photoResult)
                 }
-                self.task = nil
+                
+                let uniquePhotos = newPhotos.filter { newPhoto in
+                    !self.photos.contains(where: { $0.id == newPhoto.id })
+                }
+                
+                self.photos.append(contentsOf: uniquePhotos)
+                print("фотки добавлены!")
+                self.lastLoadedPage = nextPage
+                
+                NotificationCenter.default.post(
+                    name: ImagesListService.didChangeNotification,
+                    object: self
+                )
+                
+                print("Notification posted")
+                
+            case .failure(let error):
+                self.logError("[fetchPhotosNextPage]: NetworkError - \(error.localizedDescription)")
+            }
+            self.task = nil
             
+        }
+        self.task = task
+        task.resume()
+    }
+    
+    func changeLike(photoId: String, isLiked: Bool, _ completion: @escaping (Result<Void, Error>) -> Void) {
+        
+        guard let url = URL(string: "/photos/\(photoId)/like", relativeTo: Constants.defaultBaseURL) else {
+            logError("[changeLike]: NetworkError - failed to create URL")
+            return
+        }
+        var request = URLRequest(url: url)
+        request.setValue("Bearer \(OAuth2TokenStorage().token ?? "no token")", forHTTPHeaderField: "Authorization")
+        request.httpMethod = isLiked ? "DELETE" : "POST"
+        
+        let task = URLSession.shared.objectTask(for: request) { [weak self] (result: Result<LikeResponse, Error>) in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success:
+                print("Лайк изменён!")
+                
+                DispatchQueue.main.async{
+                    if let index = self.photos.firstIndex(where: { $0.id == photoId }) {
+                        self.photos[index].isLiked.toggle()
+                        print("Фото изменено!")
+                        completion(.success(()))
+                    }
+                }
+                
+            case .failure(let error):
+                self.logError("[changeLike]: NetworkError - \(error.localizedDescription)")
+                completion(.failure(error))
+            }
+            self.task = nil
         }
         self.task = task
         task.resume()

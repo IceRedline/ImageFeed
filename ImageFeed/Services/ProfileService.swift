@@ -15,7 +15,9 @@ final class ProfileService {
     
     private let queue = DispatchQueue(label: "com.unsplashapi.profile", attributes: .concurrent)
     
-    private(set) var profile: Profile?
+    var profile: Profile?
+    
+    // MARK: - Methods
     
     private func makeProfileTokenRequest(token: String) -> URLRequest? {
         guard let url = URL(string: "/me", relativeTo: Constants.defaultBaseURL) else {

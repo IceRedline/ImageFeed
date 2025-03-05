@@ -13,7 +13,7 @@ struct PhotoResult: Codable {
     let width, height: Int
     let color, blurHash: String
     let likes: Int
-    let likedByUser: Bool
+    var likedByUser: Bool
     let description: String?
     let user: UserResult
     let urls: UrlsResult
@@ -34,7 +34,6 @@ struct PhotoResult: Codable {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
-        // Используем ISO8601DateFormatter для преобразования строк в Date
         let dateFormatter = ISO8601DateFormatter()
         
         if let createdAtString = try container.decodeIfPresent(String.self, forKey: .createdAt),

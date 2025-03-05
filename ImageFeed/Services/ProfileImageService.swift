@@ -14,7 +14,7 @@ final class ProfileImageService {
     static let shared = ProfileImageService()
     private init() {}
     
-    private(set) var avatarURL: String?
+    var avatarURL: String?
     private var currentTask: URLSessionDataTask?
     private let queue = DispatchQueue(label: "com.profileImageService.queue", attributes: .concurrent)
     
@@ -23,7 +23,7 @@ final class ProfileImageService {
     private func requestImageURL(username: String) -> URLRequest? {
         
         let baseURL = Constants.defaultBaseURL
-                
+        
         guard let url = URL(string: "users/" + username, relativeTo: baseURL) else {
             logError("[requestImageURL]: NetworkError - failed to create profile request (username: \(username))")
             return nil
@@ -49,7 +49,7 @@ final class ProfileImageService {
                 
                 switch result {
                 case .success(let imageResult):
-                    self.avatarURL = imageResult.profileImage.small
+                    self.avatarURL = imageResult.profileImage.medium
                     completion(.success(self.avatarURL!))
                     print("[fetchProfileImageURL]: Success - avatar URL: \(self.avatarURL!)")
                     
