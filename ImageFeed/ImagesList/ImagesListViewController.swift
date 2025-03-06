@@ -53,20 +53,36 @@ final class ImagesListViewController: UIViewController {
     
     private func configCell(for cell: ImagesListCell, with indexPath: IndexPath) {
         cell.cellImage.kf.indicatorType = .activity
+        cell.cellImage.image = UIImage.cardStub // Сбрасываем старое изображение
         
-        let imageURL = URL(string: photos[indexPath.row].thumbImageURL)
-        cell.cellImage.kf.setImage(with: imageURL, placeholder: UIImage.cardStub) { [weak self] _ in
+        let photo = photos[indexPath.row]
+        let imageURL = URL(string: photo.thumbImageURL)
+        
+        let currentIndexPath = indexPath
+        
+        cell.cellImage.kf.setImage(with: imageURL, placeholder: UIImage.cardStub) { [weak self] result in
             guard let self = self else { return }
-            self.tableView.reloadRows(at: [indexPath], with: .automatic) // релоадим ячейку, чтобы обновилась её высота
+            
+            DispatchQueue.main.async {
+                // Проверяем, что ячейка все еще отображает нужное фото
+                if let updatedIndexPath = self.tableView.indexPath(for: cell), updatedIndexPath == currentIndexPath {
+                    switch result {
+                    case .success:
+                        break // обновляется картинка без релоада
+                    case .failure:
+                        cell.cellImage.image = UIImage.cardStub
+                    }
+                }
+            }
         }
         
-        if let date = photos[indexPath.row].createdAt {
+        if let date = photo.createdAt {
             cell.dateLabel.text = dateFormatter.string(from: date)
         } else {
             cell.dateLabel.text = ""
         }
         
-        let buttonImageName = photos[indexPath.row].isLiked ? "favorite_active" : "favorite_inactive"
+        let buttonImageName = photo.isLiked ? "favorite_active" : "favorite_inactive"
         cell.likeButton.setImage(UIImage(named: buttonImageName), for: .normal)
     }
     
@@ -93,7 +109,7 @@ final class ImagesListViewController: UIViewController {
 
 extension ImagesListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return photos.count
+        photos.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -153,7 +169,9 @@ extension ImagesListViewController: ImagesListCellDelegate {
         let photo = photos[indexPath.row]
         
         UIBlockingProgressHUD.show()
-        imagesListService.changeLike(photoId: photo.id, isLiked: photo.isLiked) { result in
+        imagesListService.changeLike(photoId: photo.id, isLiked: photo.isLiked) { [weak self] result in
+            guard let self = self else { return }
+            
             switch result {
             case .success:
                 // Синхронизируем массив картинок с сервисом

@@ -122,7 +122,7 @@ final class ProfileViewController: UIViewController {
         profilePicture.clipsToBounds = true
     }
     
-    @objc func exitButtonTapped() {
+    @objc private func exitButtonTapped() {
         let alert = UIAlertController(title: "Пока, пока!", message: "Уверены, что хотите выйти?", preferredStyle: .alert)
         let actionYes = UIAlertAction(title: "Да", style: .default) { _ in
             

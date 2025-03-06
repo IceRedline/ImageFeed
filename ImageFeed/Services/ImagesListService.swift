@@ -38,15 +38,11 @@ final class ImagesListService {
             case .success(let photoResults):
                 print("Все полученные фото (до фильтрации): \(photoResults.map { $0.id })")
                 // Преобразуем PhotoResult в Photo
-                let newPhotos = photoResults.map { photoResult in
-                    Photo(photoResult: photoResult)
-                }
                 
-                let uniquePhotos = newPhotos.filter { newPhoto in
-                    !self.photos.contains(where: { $0.id == newPhoto.id })
-                }
+                self.photos.append(contentsOf: photoResults
+                    .map { Photo(photoResult: $0) }
+                    .filter { newPhoto in !self.photos.contains { $0.id == newPhoto.id } })
                 
-                self.photos.append(contentsOf: uniquePhotos)
                 print("фотки добавлены!")
                 self.lastLoadedPage = nextPage
                 

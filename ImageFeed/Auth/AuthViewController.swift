@@ -8,7 +8,7 @@
 import UIKit
 import ProgressHUD
 
-class AuthViewController: UIViewController {
+final class AuthViewController: UIViewController {
     
     weak var delegate: AuthViewControllerDelegate?
     
