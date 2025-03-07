@@ -15,7 +15,7 @@ final class ProfileLogoutService {
     private init() { }
     
     func logout() {
-        KeychainWrapper.standard.remove(forKey: "BearerToken")
+        KeychainWrapper.standard.remove(forKey: KeychainKey.bearerToken.rawValue)
         cleanCookies()
         cleanProfile()
         cleanImages()

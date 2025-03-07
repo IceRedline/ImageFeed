@@ -28,7 +28,7 @@ final class ImagesListService {
             return
         }
         var request = URLRequest(url: url)
-        request.httpMethod = "GET"
+        request.httpMethod = httpRequestMethods.get
         request.setValue("Bearer \(OAuth2TokenStorage().token ?? "no token")", forHTTPHeaderField: "Authorization")
         
         let task = URLSession.shared.objectTask(for: request) { [weak self] (result: Result<[PhotoResult], Error>) in
@@ -71,7 +71,7 @@ final class ImagesListService {
         }
         var request = URLRequest(url: url)
         request.setValue("Bearer \(OAuth2TokenStorage().token ?? "no token")", forHTTPHeaderField: "Authorization")
-        request.httpMethod = isLiked ? "DELETE" : "POST"
+        request.httpMethod = isLiked ? httpRequestMethods.delete : httpRequestMethods.post
         
         let task = URLSession.shared.objectTask(for: request) { [weak self] (result: Result<LikeResponse, Error>) in
             guard let self = self else { return }
