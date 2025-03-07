@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftKeychainWrapper
 
 enum Constants {
     static let accessKey = "kyAYGFYZT1Je1CaiT648MRU9e-Z3g8SX_sCx1kqCfNI"
@@ -19,4 +20,15 @@ enum Constants {
         }
         return url
     }()
+}
+
+enum httpRequestMethods {
+    static let get = "GET"
+    static let post = "POST"
+    static let put = "PUT"
+    static let delete = "DELETE"
+}
+
+enum KeychainKey: KeychainWrapper.Key {
+    case bearerToken
 }

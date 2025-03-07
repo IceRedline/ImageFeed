@@ -12,7 +12,7 @@ final class ProfileViewController: UIViewController {
     
     private lazy var profilePicture: UIImageView = {
         let view = UIImageView()
-        let image = UIImage(named: "profilepic")
+        let image = UIImage.stub
         view.image = image
         return view
     }()
@@ -44,8 +44,8 @@ final class ProfileViewController: UIViewController {
     private let exitButton: UIButton = {
         let button = UIButton.systemButton(
             with: UIImage(systemName: "ipad.and.arrow.forward")!,
-            target: self,
-            action: nil
+            target: nil,
+            action: #selector(exitButtonTapped)
         )
         button.tintColor = .ypRed
         return button
@@ -62,6 +62,7 @@ final class ProfileViewController: UIViewController {
         loadViews()
         loadConstraints()
         updateProfileDetails(with: profileService.profile!)
+        exitButton.addTarget(self, action: #selector(exitButtonTapped), for: .touchUpInside)
         
         profileImageServiceObserver = NotificationCenter.default.addObserver(
             forName: ProfileImageService.didChangeNotification,
@@ -73,6 +74,8 @@ final class ProfileViewController: UIViewController {
         }
         updateAvatar()
     }
+    
+    // MARK: - Methods
     
     private func loadViews() {
         view.backgroundColor = .ypBlack
@@ -112,10 +115,30 @@ final class ProfileViewController: UIViewController {
             let profileImageURL = ProfileImageService.shared.avatarURL,
             let url = URL(string: profileImageURL)
         else { return }
-        print("url: \(ProfileImageService.shared.avatarURL)")
+        print("url: \(String(describing: ProfileImageService.shared.avatarURL))")
         profilePicture.kf.setImage(with: url, placeholder: UIImage.stub)
         profilePicture.layoutIfNeeded()
         profilePicture.layer.cornerRadius = profilePicture.frame.width / 2
         profilePicture.clipsToBounds = true
+    }
+    
+    @objc private func exitButtonTapped() {
+        let alert = UIAlertController(title: "Пока, пока!", message: "Уверены, что хотите выйти?", preferredStyle: .alert)
+        let actionYes = UIAlertAction(title: "Да", style: .default) { _ in
+            
+            ProfileLogoutService.shared.logout()
+            guard let window = UIApplication.shared.windows.first else {
+                assertionFailure("Invalid window configuration")
+                return
+            }
+            let splashViewController = SplashViewController()
+
+            window.rootViewController = splashViewController
+            window.makeKeyAndVisible()
+        }
+        let actionNo = UIAlertAction(title: "Нет", style: .cancel)
+        alert.addAction(actionYes)
+        alert.addAction(actionNo)
+        present(alert, animated: true)
     }
 }

@@ -12,7 +12,7 @@ enum WebViewConstants {
     static let unsplashAuthorizeString = "https://unsplash.com/oauth/authorize"
 }
 
-class WebViewViewController: UIViewController {
+final class WebViewViewController: UIViewController {
     
     @IBOutlet private var webView: WKWebView!
     @IBOutlet private weak var progressView: UIProgressView!

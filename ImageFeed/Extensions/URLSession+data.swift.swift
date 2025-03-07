@@ -51,6 +51,8 @@ extension URLSession {
         completion: @escaping (Result<T, Error>) -> Void
     ) -> URLSessionTask {
         let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        
         let task = data(for: request) { (result: Result<Data, Error>) in
             DispatchQueue.main.async {
                 switch result {

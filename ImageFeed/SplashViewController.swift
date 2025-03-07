@@ -21,7 +21,6 @@ final class SplashViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        //KeychainWrapper.standard.remove(forKey: "BearerToken")
         view.backgroundColor = .ypBlack
         logoImage.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(logoImage)
