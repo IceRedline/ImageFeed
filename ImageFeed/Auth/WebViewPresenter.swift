@@ -6,12 +6,14 @@
 //
 
 import Foundation
+import WebKit
 
 final class WebViewPresenter: WebViewPresenterProtocol {
     
     var view: WebViewViewControllerProtocol?
     
     func viewDidLoad() {
+        didUpdateProgressValue(0)
         loadAuthView()
     }
     
@@ -35,6 +37,28 @@ final class WebViewPresenter: WebViewPresenterProtocol {
         
         let request = URLRequest(url: url)
         view?.load(request: request)
+    }
+    
+    func didUpdateProgressValue(_ newValue: Double) {
+        let newProgressValue = Float(newValue)
+        view?.setProgressValue(newProgressValue)
+        view?.setProgressHidden(shouldHideProgress(for: newProgressValue))
+    }
+    
+    func shouldHideProgress(for value: Float) -> Bool {
+        abs(value - 1.0) <= 0.0001
+    }
+    
+    func code(from url: URL) -> String? {
+        if let urlComponents = URLComponents(string: url.absoluteString),
+           urlComponents.path == "/oauth/authorize/native",
+           let items = urlComponents.queryItems,
+           let codeItem = items.first(where: { $0.name == "code" })
+        {
+            return codeItem.value
+        } else {
+            return nil
+        }
     }
     
     private func logError(_ message: String) {
