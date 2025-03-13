@@ -8,24 +8,20 @@
 import UIKit
 @preconcurrency import WebKit
 
-enum WebViewConstants {
-    static let unsplashAuthorizeString = "https://unsplash.com/oauth/authorize"
-}
-
-final class WebViewViewController: UIViewController {
+final class WebViewViewController: UIViewController & WebViewViewControllerProtocol {
     
     @IBOutlet private var webView: WKWebView!
     @IBOutlet private weak var progressView: UIProgressView!
     
     private var estimatedProgressObservaiton: NSKeyValueObservation?
     weak var delegate: WebViewViewControllerDelegate?
+    var presenter: WebViewPresenterProtocol?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         webView.navigationDelegate = self
-        loadAuthView()
-        
+        presenter?.viewDidLoad()
         estimatedProgressObservaiton = webView.observe(
             \.estimatedProgress,
              changeHandler: { [weak self] _, _ in
@@ -40,25 +36,7 @@ final class WebViewViewController: UIViewController {
         progressView.isHidden = fabs(webView.estimatedProgress - 1.0) <= 0.0001
     }
     
-    private func loadAuthView() {
-        guard var urlComponents = URLComponents(string: WebViewConstants.unsplashAuthorizeString) else {
-            logError("[loadAuthView]: URLFormationError - Не удалось создать URLComponents")
-            return
-        }
-        
-        urlComponents.queryItems = [
-            URLQueryItem(name: "client_id", value: Constants.accessKey),
-            URLQueryItem(name: "redirect_uri", value: Constants.redirectURI),
-            URLQueryItem(name: "response_type", value: "code"),
-            URLQueryItem(name: "scope", value: Constants.accessScope)
-        ]
-        
-        guard let url = urlComponents.url else {
-            logError("[loadAuthView]: URLFormationError - Не удалось сформировать финальный URL")
-            return
-        }
-        
-        let request = URLRequest(url: url)
+    func load(request: URLRequest) {
         webView.load(request)
     }
 }

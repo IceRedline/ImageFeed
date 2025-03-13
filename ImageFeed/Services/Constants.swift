@@ -20,6 +20,7 @@ enum Constants {
         }
         return url
     }()
+    static let unsplashAuthorizeString = "https://unsplash.com/oauth/authorize"
 }
 
 enum httpRequestMethods {
