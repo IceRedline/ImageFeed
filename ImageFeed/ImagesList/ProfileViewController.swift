@@ -8,7 +8,7 @@
 import UIKit
 import Kingfisher
 
-final class ProfileViewController: UIViewController {
+final class ProfileViewController: UIViewController & ProfileViewControllerProtocol {
     
     private lazy var profilePicture: UIImageView = {
         let view = UIImageView()
@@ -51,31 +51,28 @@ final class ProfileViewController: UIViewController {
         return button
     }()
     
-    private let storage = OAuth2TokenStorage()
     private let profileService = ProfileService.shared
     
-    private var profileImageServiceObserver: NSObjectProtocol?
+    var presenter: ProfilePresenterProtocol?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        configure(ProfilePresenter())
         
         loadViews()
         loadConstraints()
         updateProfileDetails(with: profileService.profile!)
         exitButton.addTarget(self, action: #selector(exitButtonTapped), for: .touchUpInside)
         
-        profileImageServiceObserver = NotificationCenter.default.addObserver(
-            forName: ProfileImageService.didChangeNotification,
-            object: nil,
-            queue: .main
-        ) { [weak self] _ in
-            guard let self = self else { return }
-            self.updateAvatar()
-        }
-        updateAvatar()
+        presenter?.viewDidLoad()
     }
     
     // MARK: - Methods
+    
+    func configure(_ presenter: ProfilePresenterProtocol) {
+        self.presenter = presenter
+        self.presenter?.view = self
+    }
     
     private func loadViews() {
         view.backgroundColor = .ypBlack
@@ -104,18 +101,13 @@ final class ProfileViewController: UIViewController {
         ])
     }
     
-    private func updateProfileDetails(with profile: Profile) {
+    func updateProfileDetails(with profile: Profile) {
         userName.text = profile.name
         userNickname.text = profile.loginName
         userDescription.text = profile.bio
     }
     
-    private func updateAvatar() {
-        guard
-            let profileImageURL = ProfileImageService.shared.avatarURL,
-            let url = URL(string: profileImageURL)
-        else { return }
-        print("url: \(String(describing: ProfileImageService.shared.avatarURL))")
+    func updateAvatar(with url: URL?) {
         profilePicture.kf.setImage(with: url, placeholder: UIImage.stub)
         profilePicture.layoutIfNeeded()
         profilePicture.layer.cornerRadius = profilePicture.frame.width / 2
@@ -125,16 +117,7 @@ final class ProfileViewController: UIViewController {
     @objc private func exitButtonTapped() {
         let alert = UIAlertController(title: "Пока, пока!", message: "Уверены, что хотите выйти?", preferredStyle: .alert)
         let actionYes = UIAlertAction(title: "Да", style: .default) { _ in
-            
-            ProfileLogoutService.shared.logout()
-            guard let window = UIApplication.shared.windows.first else {
-                assertionFailure("Invalid window configuration")
-                return
-            }
-            let splashViewController = SplashViewController()
-
-            window.rootViewController = splashViewController
-            window.makeKeyAndVisible()
+            self.presenter?.logout()
         }
         let actionNo = UIAlertAction(title: "Нет", style: .cancel)
         alert.addAction(actionYes)
