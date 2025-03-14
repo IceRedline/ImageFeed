@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Photo {
+public struct Photo {
     var photoResult: PhotoResult
     
     var id: String {

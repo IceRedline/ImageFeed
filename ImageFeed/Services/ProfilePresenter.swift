@@ -16,7 +16,7 @@ final class ProfilePresenter: ProfilePresenterProtocol {
     var view: ProfileViewControllerProtocol?
     
     func viewDidLoad() {
-        print("presenter загружен!")
+        print("Profile presenter загружен!")
         
         profileImageServiceObserver = NotificationCenter.default.addObserver(
             forName: ProfileImageService.didChangeNotification,

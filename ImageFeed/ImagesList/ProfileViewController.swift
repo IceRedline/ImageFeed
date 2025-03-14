@@ -61,7 +61,7 @@ final class ProfileViewController: UIViewController & ProfileViewControllerProto
         
         loadViews()
         loadConstraints()
-        updateProfileDetails(with: profileService.profile!)
+        //updateProfileDetails(with: profileService.profile)
         exitButton.addTarget(self, action: #selector(exitButtonTapped), for: .touchUpInside)
         
         presenter?.viewDidLoad()
@@ -114,7 +114,7 @@ final class ProfileViewController: UIViewController & ProfileViewControllerProto
         profilePicture.clipsToBounds = true
     }
     
-    @objc private func exitButtonTapped() {
+    @objc internal func exitButtonTapped() {
         let alert = UIAlertController(title: "Пока, пока!", message: "Уверены, что хотите выйти?", preferredStyle: .alert)
         let actionYes = UIAlertAction(title: "Да", style: .default) { _ in
             self.presenter?.logout()

@@ -34,4 +34,6 @@ struct PhotoResult: Codable {
         case user
         case urls
     }
+    
+    
 }
