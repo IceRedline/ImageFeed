@@ -14,6 +14,7 @@ final class ProfileViewController: UIViewController & ProfileViewControllerProto
         let view = UIImageView()
         let image = UIImage.stub
         view.image = image
+        view.accessibilityIdentifier = "ProfilePicture"
         return view
     }()
     
@@ -22,6 +23,7 @@ final class ProfileViewController: UIViewController & ProfileViewControllerProto
         label.text = "Екатерина Новикова"
         label.textColor = .ypWhite
         label.font = UIFont.systemFont(ofSize: 23, weight: .bold)
+        label.accessibilityIdentifier = "UserName"
         return label
     }()
     
@@ -30,6 +32,7 @@ final class ProfileViewController: UIViewController & ProfileViewControllerProto
         label.text = "@ekaterina_nov"
         label.textColor = .ypGray
         label.font = UIFont.systemFont(ofSize: 13)
+        label.accessibilityIdentifier = "UserNickname"
         return label
     }()
     
@@ -38,6 +41,7 @@ final class ProfileViewController: UIViewController & ProfileViewControllerProto
         label.text = "Hello, world!"
         label.textColor = .ypWhite
         label.font = UIFont.systemFont(ofSize: 13)
+        label.accessibilityIdentifier = "UserDescription"
         return label
     }()
     
@@ -48,6 +52,7 @@ final class ProfileViewController: UIViewController & ProfileViewControllerProto
             action: #selector(exitButtonTapped)
         )
         button.tintColor = .ypRed
+        button.accessibilityIdentifier = "ExitButton"
         return button
     }()
     
@@ -61,7 +66,7 @@ final class ProfileViewController: UIViewController & ProfileViewControllerProto
         
         loadViews()
         loadConstraints()
-        //updateProfileDetails(with: profileService.profile)
+        
         exitButton.addTarget(self, action: #selector(exitButtonTapped), for: .touchUpInside)
         
         presenter?.viewDidLoad()

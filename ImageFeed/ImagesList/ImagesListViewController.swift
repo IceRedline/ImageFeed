@@ -19,6 +19,7 @@ final class ImagesListViewController: UIViewController & ImagesListViewControlle
         
         tableView.dataSource = self
         tableView.delegate = self
+        tableView.accessibilityIdentifier = "ImageList"
         tableView.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
         
         presenter?.viewDidLoad()
@@ -104,6 +105,11 @@ extension ImagesListViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        
+        if ProcessInfo.processInfo.arguments.contains("UITests") {
+                return
+            }
+        
         if indexPath.row == (presenter?.getPhotos().count ?? 0) - 1 {
             presenter?.fetchPhotosNextPage()
         }
