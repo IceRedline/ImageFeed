@@ -7,7 +7,10 @@
 
 import Foundation
 
-final class ImagesListService {
+public final class ImagesListService {
+    
+    static let shared = ImagesListService()
+    private init() {}
     
     private var lastLoadedPage: Int?
     private var task: URLSessionTask? = nil
@@ -18,17 +21,19 @@ final class ImagesListService {
     
     // MARK: - Methods
     
-    func fetchPhotosNextPage() {
+    func fetchPhotosNextPage(completion: @escaping (Result<[Photo], Error>) -> Void) {
         guard task == nil else { return }
         
         let nextPage = (lastLoadedPage ?? 0) + 1
         
         guard let url = URL(string: "/photos?page=\(nextPage)", relativeTo: Constants.defaultBaseURL) else {
             logError("[fetchPhotosNextPage]: NetworkError - failed to create URL")
+            completion(.failure(NetworkError.invalidURL))
             return
         }
+        
         var request = URLRequest(url: url)
-        request.httpMethod = httpRequestMethods.get
+        request.httpMethod = HttpRequestMethods.get
         request.setValue("Bearer \(OAuth2TokenStorage().token ?? "no token")", forHTTPHeaderField: "Authorization")
         
         let task = URLSession.shared.objectTask(for: request) { [weak self] (result: Result<[PhotoResult], Error>) in
@@ -36,29 +41,30 @@ final class ImagesListService {
             
             switch result {
             case .success(let photoResults):
-                print("Все полученные фото (до фильтрации): \(photoResults.map { $0.id })")
-                // Преобразуем PhotoResult в Photo
-                
-                self.photos.append(contentsOf: photoResults
-                    .map { Photo(photoResult: $0) }
-                    .filter { newPhoto in !self.photos.contains { $0.id == newPhoto.id } })
-                
-                print("фотки добавлены!")
-                self.lastLoadedPage = nextPage
-                
-                NotificationCenter.default.post(
-                    name: ImagesListService.didChangeNotification,
-                    object: self
-                )
-                
-                print("Notification posted")
-                
+                let newPhotos = photoResults.map { Photo(photoResult: $0) }
+                    
+                    // Фильтруем новые фотографии, исключая те, которые уже есть в массиве
+                    let uniquePhotos = newPhotos.filter { newPhoto in
+                        !self.photos.contains(where: { $0.id == newPhoto.id })
+                    }
+                    
+                    self.photos.append(contentsOf: uniquePhotos)
+                    self.lastLoadedPage = nextPage
+                    
+                    NotificationCenter.default.post(
+                        name: ImagesListService.didChangeNotification,
+                        object: self
+                    )
+                    
+                    completion(.success(uniquePhotos))
+
             case .failure(let error):
                 self.logError("[fetchPhotosNextPage]: NetworkError - \(error.localizedDescription)")
+                completion(.failure(error))
             }
             self.task = nil
-            
         }
+        
         self.task = task
         task.resume()
     }
@@ -71,7 +77,7 @@ final class ImagesListService {
         }
         var request = URLRequest(url: url)
         request.setValue("Bearer \(OAuth2TokenStorage().token ?? "no token")", forHTTPHeaderField: "Authorization")
-        request.httpMethod = isLiked ? httpRequestMethods.delete : httpRequestMethods.post
+        request.httpMethod = isLiked ? HttpRequestMethods.delete : HttpRequestMethods.post
         
         let task = URLSession.shared.objectTask(for: request) { [weak self] (result: Result<LikeResponse, Error>) in
             guard let self = self else { return }

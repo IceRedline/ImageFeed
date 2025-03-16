@@ -2,7 +2,7 @@
 //  Constants.swift
 //  ImageFeed
 //
-//  Created by Артем Табенский on 22.01.2025.
+//  Created by Артем Табенский on 16.03.2025.
 //
 
 import Foundation
@@ -20,13 +20,8 @@ enum Constants {
         }
         return url
     }()
-}
-
-enum httpRequestMethods {
-    static let get = "GET"
-    static let post = "POST"
-    static let put = "PUT"
-    static let delete = "DELETE"
+    static let unsplashAuthorizeURLString = "https://unsplash.com/oauth/authorize"
+    static let bearerToken = "BearerToken"
 }
 
 enum KeychainKey: KeychainWrapper.Key {

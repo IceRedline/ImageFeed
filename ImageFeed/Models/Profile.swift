@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Profile {
+public struct Profile {
     let profileResult: ProfileResult
     
     var userName: String? {
@@ -26,7 +26,7 @@ struct Profile {
         return profileResult.bio
     }
     
-    init(profileResult: ProfileResult) {
+    public init(profileResult: ProfileResult) {
         self.profileResult = profileResult
     }
 }
