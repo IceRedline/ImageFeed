@@ -26,7 +26,7 @@ final class ProfileService {
         }
         
         var request = URLRequest(url: url)
-        request.httpMethod = httpRequestMethods.get
+        request.httpMethod = HttpRequestMethods.get
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         return request
     }

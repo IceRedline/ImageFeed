@@ -19,7 +19,7 @@ final class ImagesListViewController: UIViewController & ImagesListViewControlle
         
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.accessibilityIdentifier = "ImageList"
+        tableView.accessibilityIdentifier = AccessibilityIDs.imageList
         tableView.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
         
         presenter?.viewDidLoad()
@@ -33,7 +33,7 @@ final class ImagesListViewController: UIViewController & ImagesListViewControlle
     func updateTableViewAnimated() {
         guard let presenter = presenter else { return }
         let oldCount = tableView.numberOfRows(inSection: 0)
-        let newCount = presenter.getPhotos().count
+        let newCount = presenter.getPhotosCount()
         
         guard oldCount != newCount else { return }
         
@@ -69,7 +69,7 @@ final class ImagesListViewController: UIViewController & ImagesListViewControlle
 
 extension ImagesListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return presenter?.getPhotos().count ?? 0
+        presenter?.getPhotosCount() ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -107,10 +107,10 @@ extension ImagesListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         
         if ProcessInfo.processInfo.arguments.contains("UITests") {
-                return
-            }
+            return
+        }
         
-        if indexPath.row == (presenter?.getPhotos().count ?? 0) - 1 {
+        if indexPath.row == (presenter?.getPhotosCount() ?? 0) - 1 {
             presenter?.fetchPhotosNextPage()
         }
     }

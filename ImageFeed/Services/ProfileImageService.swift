@@ -30,7 +30,7 @@ final class ProfileImageService {
         }
         
         var request = URLRequest(url: url)
-        request.httpMethod = httpRequestMethods.get
+        request.httpMethod = HttpRequestMethods.get
         request.setValue("Bearer \(OAuth2TokenStorage().token ?? "no token")", forHTTPHeaderField: "Authorization")
         return request
     }

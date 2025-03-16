@@ -8,7 +8,7 @@
 import Foundation
 
 final class ImagesListPresenter: ImagesListPresenterProtocol {
-    private let imagesListService = ImagesListService()
+    private let imagesListService = ImagesListService.shared
     private var photos: [Photo] = []
     private var imagesListServiceObserver: NSObjectProtocol?
     
@@ -47,8 +47,9 @@ final class ImagesListPresenter: ImagesListPresenterProtocol {
     func changeLike(photoId: String, isLiked: Bool, completion: @escaping (Bool) -> Void) {
         UIBlockingProgressHUD.show()
         imagesListService.changeLike(photoId: photoId, isLiked: isLiked) { [weak self] result in
-            guard let self = self else { return }
             UIBlockingProgressHUD.dismiss()
+            
+            guard let self = self else { return }
             
             switch result {
             case .success:
@@ -63,8 +64,8 @@ final class ImagesListPresenter: ImagesListPresenterProtocol {
         }
     }
     
-    func getPhotos() -> [Photo] {
-        return photos
+    func getPhotosCount() -> Int {
+        return photos.count
     }
     
     func getPhoto(at indexPath: IndexPath) -> Photo {

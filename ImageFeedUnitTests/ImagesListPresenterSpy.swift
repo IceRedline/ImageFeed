@@ -29,8 +29,8 @@ final class ImagesListPresenterSpy: ImagesListPresenterProtocol {
         completion(true)
     }
     
-    func getPhotos() -> [ImageFeed.Photo] {
-        return photos
+    func getPhotosCount() -> Int {
+        return photos.count
     }
     
     func getPhoto(at indexPath: IndexPath) -> ImageFeed.Photo {

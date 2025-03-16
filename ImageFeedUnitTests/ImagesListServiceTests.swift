@@ -11,7 +11,7 @@ import XCTest
 final class ImagesListServiceTests: XCTestCase {
     
     func testFetchPhotos() {
-        let service = ImagesListService()
+        let service = ImagesListService.shared
         
         let expectation = self.expectation(description: "Wait for Notification")
         NotificationCenter.default.addObserver(

@@ -77,7 +77,7 @@ final class WebViewTests: XCTestCase {
         urlComponents?.queryItems = [URLQueryItem(name: "code", value: "test code")]
         let url = urlComponents?.url
         
-        let code = authHelper.code(from: url!)
+        let code = authHelper.getCode(from: url!)
         
         XCTAssertEqual(code, "test code")
     }

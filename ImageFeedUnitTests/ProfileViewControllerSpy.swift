@@ -19,7 +19,7 @@ final class ProfileViewControllerSpy: ProfileViewControllerProtocol {
         presenter?.viewDidLoad()
     }
     
-    func configure(_ presenter: any ImageFeed.ProfilePresenterProtocol) {
+    func configure(_ presenter: ProfilePresenterProtocol) {
         self.presenter = presenter
         self.presenter?.view = self
     }

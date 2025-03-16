@@ -7,13 +7,13 @@
 
 import Foundation
 
-public protocol ImagesListPresenterProtocol {
+protocol ImagesListPresenterProtocol {
     var view: ImagesListViewControllerProtocol? { get set }
     
     func viewDidLoad()
     func fetchPhotosNextPage()
     func changeLike(photoId: String, isLiked: Bool, completion: @escaping (Bool) -> Void)
-    func getPhotos() -> [Photo]
+    func getPhotosCount() -> Int
     func getPhoto(at indexPath: IndexPath) -> Photo
     func getFormattedDate(from date: Date?) -> String
 }

@@ -46,13 +46,12 @@ final class ImagesListCell: UITableViewCell {
         cellImage.kf.setImage(with: imageURL, placeholder: UIImage.cardStub) { [weak self] result in
             guard let self = self else { return }
             
-            DispatchQueue.main.async {
-                switch result {
-                case .success:
-                    break // обновляется картинка без релоада
-                case .failure:
-                    self.cellImage.image = UIImage.cardStub
-                }
+            switch result {
+            case .success:
+                break // обновляется картинка без релоада
+            case .failure:
+                self.cellImage.image = UIImage.cardStub
+                
             }
         }
         

@@ -28,7 +28,7 @@ final class ImageFeedUITests: XCTestCase {
         XCTAssertTrue(loginTextField.waitForExistence(timeout: 5))
         
         loginTextField.tap()
-        loginTextField.typeText("scpd2604@gmail.com")
+        loginTextField.typeText("<ваш_email>")
         sleep(2)
         let start = webView.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.3))
         let end = webView.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.1))
@@ -39,7 +39,7 @@ final class ImageFeedUITests: XCTestCase {
         
         passwordTextField.tap()
         sleep(1)
-        passwordTextField.typeText("bakkac-gobge8-cyjqUj")
+        passwordTextField.typeText("<ваш_пароль>")
         webView.swipeUp()
         webView.buttons["Login"].tap()
         

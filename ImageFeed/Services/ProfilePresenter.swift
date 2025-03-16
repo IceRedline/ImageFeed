@@ -5,7 +5,6 @@
 //  Created by Артем Табенский on 13.03.2025.
 //
 
-import Foundation
 import UIKit
 
 final class ProfilePresenter: ProfilePresenterProtocol {
